@@ -1102,6 +1102,29 @@ def get_power_augmented_net(
     power_augmented_net = power_augmented_gross - power_consumed
     return power_augmented_net
 
+def get_power_augmented_gross(
+    items: dict[str, float],
+    alien_power_augmenters_unfueled: int,
+    alien_power_augmenters_fueled: int,
+) -> float:
+    power_gross = items[item_name_power_gross_average]
+
+    alien_power_augmenter_multiplier = (
+        alien_power_augmenter_power_multiplier_unfueled * alien_power_augmenters_unfueled
+        + alien_power_augmenter_power_multiplier_fueled * alien_power_augmenters_fueled
+    )
+
+    power_augmented_gross = (
+        (
+            power_gross
+            + alien_power_augmenter_base_power * (
+                alien_power_augmenters_unfueled + alien_power_augmenters_fueled
+            )
+        )
+        * (1 + alien_power_augmenter_multiplier)
+    )
+    return power_augmented_gross
+
 # TODO.
 # -   Note importantly: we have 106 Somersloops, and we need to unlock
 #     -   1 for Alien Power Augmenter, or
